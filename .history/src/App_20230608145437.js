@@ -7,7 +7,6 @@ import './App.css';
 
 function App() {
   return (
-    <ContractProvider>
     <ThirdwebProvider>
       <div className='app__wrapper'>
         {/* <img className='turtlecat__coin' src={coin2} alt='TurtleCat!' /> */}
@@ -21,7 +20,6 @@ function App() {
       {/* <Footer2 /> */}
 
     </ThirdwebProvider>
-    </ContractProvider>
   );
 }
 

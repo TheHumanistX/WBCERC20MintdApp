@@ -11,14 +11,8 @@ const ConnectionBalanceInfo = () => {
     const address = useAddress();
     const chain = useChain();
     const status = useConnectionStatus();
-    // const { data, isLoading, error } = useContractRead(contract, 'totalSupply');
-    // console.log(`totalSupply: ${data}`)
-    
-    
-    // const { balanceOf } = useContractRead(contract, 'balanceOf', ['0x59d2366B5961a5686Af406A83Cf90615B4229f78']);
-    // console.log(balanceOf)
-    // const { canMint } = useContractRead(contract, 'checkIfUserCanMint', ['0x59d2366B5961a5686Af406A83Cf90615B4229f78']);
-    // console.log(`Can Mint: ${canMint}`)
+    const balanceOf = useContractRead(contract, 'balanceOf', [address]);
+    console.log(balanceOf)
     
     const handleConnectWallet = () => {
         // If there is no connected wallet, return a message indicating so

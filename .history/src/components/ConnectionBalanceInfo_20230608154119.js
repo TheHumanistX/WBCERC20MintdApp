@@ -11,8 +11,8 @@ const ConnectionBalanceInfo = () => {
     const address = useAddress();
     const chain = useChain();
     const status = useConnectionStatus();
-    // const { data, isLoading, error } = useContractRead(contract, 'totalSupply');
-    // console.log(`totalSupply: ${data}`)
+    const { data, isLoading, error } = useContractRead(contract, 'totalSupply');
+    console.log(`totalSupply: ${data}`)
     
     
     // const { balanceOf } = useContractRead(contract, 'balanceOf', ['0x59d2366B5961a5686Af406A83Cf90615B4229f78']);

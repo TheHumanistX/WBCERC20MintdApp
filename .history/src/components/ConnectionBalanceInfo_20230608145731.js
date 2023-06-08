@@ -1,25 +1,15 @@
 import React, { useContext } from 'react'
-import { useAddress, useChain, useConnectionStatus, useContract, useContractRead  } from '@thirdweb-dev/react';
+import { useAddress, useChain, useConnectionStatus, useContract } from '@thirdweb-dev/react';
 import { ContractContext } from '../context/ContractContext';
-import ABI from '../ABI/ABI.json';
 
 const ConnectionBalanceInfo = () => {
 
     const { contractAddress } = useContext(ContractContext);
-    const { contract } = useContract(contractAddress, ABI);
-    console.log(contract);
+    const { contract } = useContract(contractAddress);
     const address = useAddress();
     const chain = useChain();
     const status = useConnectionStatus();
-    // const { data, isLoading, error } = useContractRead(contract, 'totalSupply');
-    // console.log(`totalSupply: ${data}`)
-    
-    
-    // const { balanceOf } = useContractRead(contract, 'balanceOf', ['0x59d2366B5961a5686Af406A83Cf90615B4229f78']);
-    // console.log(balanceOf)
-    // const { canMint } = useContractRead(contract, 'checkIfUserCanMint', ['0x59d2366B5961a5686Af406A83Cf90615B4229f78']);
-    // console.log(`Can Mint: ${canMint}`)
-    
+
     const handleConnectWallet = () => {
         // If there is no connected wallet, return a message indicating so
         if (!address) return <span className='italic'>No Wallet Connected!</span>
@@ -47,7 +37,7 @@ const ConnectionBalanceInfo = () => {
 
 
     return (
-        <div className='info__container border-gradient'>
+        <div class='info__container border-gradient'>
             <div className="wallet__address">
                 {handleConnectWallet()}
             </div>
