@@ -17,7 +17,7 @@ const TransactionEvents = () => {
 
     // Mapping over all events, and creating a new array of the 'to' addresses.
     // If the 'to' address does not exist in an event, it adds `null` to the array.
-    const toValues = allEvents ? allEvents.map(event => event.data ? event.data.to : null) : [];
+    const toValues = allEvents.map(event => event.data ? event.data.to : null);
 
     // Logging the array of 'to' addresses to the console for debugging purposes.
     console.log(toValues);
