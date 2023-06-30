@@ -18,15 +18,20 @@ const TransactionEvents = () => {
         subscribe: true
       });
 
+    // Mapping over all events, and creating a new array of the 'to' addresses.
+    // If the 'to' address does not exist in an event, it adds `null` to the array.
     const mintEvents = allTransferEvents
     ? allTransferEvents
       .filter(event => event.data.from === '0x0000000000000000000000000000000000000000')
-      .map(event => ({ to: event.data.to }))
+      .map(event => ({ to: event.data.to, tokenId: event.data.tokenId.toNumber() }))
     : [];
 
-    console.log('mintEvents.length: ', mintEvents.length)
-    const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5).reverse() : mintEvents.reverse();
- 
+    const recentMints = mintEvents.slice(0, mintEvents.length - 5);
+    // Logging the array of 'to' addresses to the console for debugging purposes.
+    console.log('mintedToAddresses: ', mintedToAddresses);
+
+    // Taking the first five 'to' addresses from the array.
+    const recentTransactions = mintedToAddresses.slice(0, 5);
 
     return (
     

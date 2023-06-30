@@ -18,14 +18,15 @@ const TransactionEvents = () => {
         subscribe: true
       });
 
+    // Mapping over all events, and creating a new array of the 'to' addresses.
+    // If the 'to' address does not exist in an event, it adds `null` to the array.
     const mintEvents = allTransferEvents
     ? allTransferEvents
       .filter(event => event.data.from === '0x0000000000000000000000000000000000000000')
       .map(event => ({ to: event.data.to }))
     : [];
 
-    console.log('mintEvents.length: ', mintEvents.length)
-    const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5).reverse() : mintEvents.reverse();
+    const recentMints = mintEvents.slice(0, mintEvents.length - 5);
  
 
     return (

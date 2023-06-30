@@ -11,22 +11,25 @@ const TransactionEvents = () => {
     const { contract } = useContract(contractAddress);
 
     // Using the `useContractEvents` hook to read all events from the contract.
-    const { data: allTransferEvents } = useContractEvents(contract, "Transfer", {
+    const { data: allEvents } = useContractEvents(contract, "Transfer", {
         queryFilter: {
           fromBlock: 9170000,
         },
         subscribe: true
       });
 
-    const mintEvents = allTransferEvents
-    ? allTransferEvents
-      .filter(event => event.data.from === '0x0000000000000000000000000000000000000000')
-      .map(event => ({ to: event.data.to }))
-    : [];
+    // Logging the events to the console as a JSON string for debugging purposes.
+    console.log(`All Events: ${contract && allEvents ? JSON.stringify(allEvents) : {}}`);
 
-    console.log('mintEvents.length: ', mintEvents.length)
-    const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5).reverse() : mintEvents.reverse();
- 
+    // Mapping over all events, and creating a new array of the 'to' addresses.
+    // If the 'to' address does not exist in an event, it adds `null` to the array.
+    const mintedToAddresses = allEvents ? allEvents.map(event => event.data ? event.data.to : null) : [];
+
+    // Logging the array of 'to' addresses to the console for debugging purposes.
+    console.log('mintedToAddresses: ', mintedToAddresses);
+
+    // Taking the first five 'to' addresses from the array.
+    const recentTransactions = mintedToAddresses.slice(0, 5);
 
     return (
     
@@ -35,13 +38,13 @@ const TransactionEvents = () => {
                 Recent Transactions
             </div>
             {/* Iterating over recentTransactions array, and creating a JSX element for each transaction. */}
-            {recentMints.map((mint, index) => (
+            {recentTransactions.map((to, index) => (
                 // `key` prop is required by React for optimal performance when rendering lists.
                 // The transaction index and 'to' address are displayed for each transaction.
                 <div className='transaction__list' key={index}>
-                    <p className='transaction__to'>To: {mint.to}</p>
+                    <p className='transaction__to'>To: {to}</p>
                     {/* Displaying the transaction number, starting from the most recent transaction. */}
-                    <span>#{mintEvents.length - index}</span>
+                    <span>#{mintedToAddresses.length - index}</span>
                 </div>
             ))}
         </div>
