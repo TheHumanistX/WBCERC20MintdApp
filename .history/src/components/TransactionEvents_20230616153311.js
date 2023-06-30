@@ -1,25 +1,31 @@
 import React from 'react'
+import { ethers } from 'ethers';
+import abi from '../abi/abi';
 
 // Importing required hooks from Thirdweb libraries.
 import { useContract, useContractEvents } from '@thirdweb-dev/react';
 
 const TransactionEvents = () => {
+    const [wbcContract, setWBCContract] = useState(null);
     // Specifying the contract address to interact with.
     const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
 
+    const provider = useMemo(() => new ethers.providers.Web3Provider(window.ethereum), []);
     // Using the `useContract` hook from thirdweb library to create a contract instance.
-    const { contract } = useContract(contractAddress);
+    // const { contract } = useContract(contractAddress);
+
+    useEffect(() => {
+        if(contractAddress && provider) {
+            const contract = new ethers.Contract(contractAddress, abi, provider);
+            setWBCContract(contract);
+        }
+    }, [contractAddress, provider]);
 
     // Using the `useContractEvents` hook to read all events from the contract.
-    const { data: allEvents } = useContractEvents(contract, "Transfer", {
-        queryFilter: {
-          fromBlock: 9184594,
-        },
-        subscribe: true
-      });
+    const { data: allEvents } = useContractEvents(contract, "Transfer");
 
     // Logging the events to the console as a JSON string for debugging purposes.
-    console.log(`All Events: ${contract && allEvents ? JSON.stringify(allEvents) : {}}`);
+    console.log(`All Events: ${JSON.stringify(allEvents)}`);
 
     // Mapping over all events, and creating a new array of the 'to' addresses.
     // If the 'to' address does not exist in an event, it adds `null` to the array.

@@ -1,5 +1,4 @@
 import React from 'react'
-
 // Importing required hooks from Thirdweb libraries.
 import { useContract, useContractEvents } from '@thirdweb-dev/react';
 
@@ -11,15 +10,10 @@ const TransactionEvents = () => {
     const { contract } = useContract(contractAddress);
 
     // Using the `useContractEvents` hook to read all events from the contract.
-    const { data: allEvents } = useContractEvents(contract, "Transfer", {
-        queryFilter: {
-          fromBlock: 9184594,
-        },
-        subscribe: true
-      });
+    const { data: allEvents } = useContractEvents(contract, "Transfer");
 
     // Logging the events to the console as a JSON string for debugging purposes.
-    console.log(`All Events: ${contract && allEvents ? JSON.stringify(allEvents) : {}}`);
+    console.log(`All Events: ${JSON.stringify(allEvents)}`);
 
     // Mapping over all events, and creating a new array of the 'to' addresses.
     // If the 'to' address does not exist in an event, it adds `null` to the array.
@@ -44,7 +38,7 @@ const TransactionEvents = () => {
                 <div className='transaction__list' key={index}>
                     <p className='transaction__to'>To: {to}</p>
                     {/* Displaying the transaction number, starting from the most recent transaction. */}
-                    <span>#{mintedToAddresses.length - index}</span>
+                    <span>#{recentTransactions.length - index}</span>
                 </div>
             ))}
         </div>

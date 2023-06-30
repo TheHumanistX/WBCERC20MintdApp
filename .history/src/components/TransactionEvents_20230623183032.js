@@ -13,13 +13,12 @@ const TransactionEvents = () => {
     // Using the `useContractEvents` hook to read all events from the contract.
     const { data: allEvents } = useContractEvents(contract, "Transfer", {
         queryFilter: {
-          fromBlock: 9184594,
+          fromBlock: -300,
         },
-        subscribe: true
       });
 
     // Logging the events to the console as a JSON string for debugging purposes.
-    console.log(`All Events: ${contract && allEvents ? JSON.stringify(allEvents) : {}}`);
+    console.log(`All Events: ${JSON.stringify(allEvents)}`);
 
     // Mapping over all events, and creating a new array of the 'to' addresses.
     // If the 'to' address does not exist in an event, it adds `null` to the array.
