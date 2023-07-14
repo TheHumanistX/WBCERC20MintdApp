@@ -2,11 +2,11 @@ import React from 'react'
 import { ethers } from 'ethers';
 import { useTokenContractData } from '../context/EthersContext';
 // Import various hooks from @thirdweb-dev/react for interacting with the Ethereum blockchain
-// import { useAddress, useChain, useContract, useContractRead } from '@thirdweb-dev/react';
+import { useAddress, useChain, useContract, useContractRead } from '@thirdweb-dev/react';
 
 
 const ConnectionBalanceInfo = () => {
-    const { canMint, chainName, contract, formattedTokenBalance, walletAddress } = useTokenContractData();
+    const { balanceOf, canMint, chain, contract, walletAddress } = useTokenContractData();
     // // Define the address of the contract we want to interact with
     // const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
 
@@ -43,11 +43,11 @@ const ConnectionBalanceInfo = () => {
             </div>
             <div className='chain__name'>
                 {/* Display the name of the connected chain */}
-                CHAIN: <span>{chainName && chainName} </span>
+                CHAIN: <span>{chain && chain.name} </span>
             </div>
             <div className='WBC__balance'>
                 {/* Display the balance from the contract, converting from raw Wei to Ether and formatting it with commas */}
-                WBC BALANCE: <span>{formattedTokenBalance && formattedTokenBalance}</span>
+                WBC BALANCE: <span>{balanceOf && (balanceOf / 1e18).toLocaleString()}</span>
             </div>
             <div className='able__to__mint'>
                 {/* Check if the user can mint and display the corresponding text */}

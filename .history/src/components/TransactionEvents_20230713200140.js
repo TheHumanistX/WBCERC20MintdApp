@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers';
 import { useTokenContractData } from '../context/EthersContext'
 // Importing required hooks from Thirdweb libraries.
-// import { useContract, useContractEvents } from '@thirdweb-dev/react';
+import { useContract, useContractEvents } from '@thirdweb-dev/react';
 
 const TransactionEvents = () => {
-    const { ETH_NULL_ADDRESS, formattedBalanceOf, provider, tokenContract } = useTokenContractData();
+    const { contractAddress, ETH_NULL_ADDRESS, formattedBalanceOf, provider, tokenContract, walletAddress } = useTokenContractData();
+    const [allTransferEvents, setAllTransferEvents] = useState([]);
     const [mintEvents, setMintEvents] = useState([]);
     // // Specifying the contract address to interact with.
     // const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
@@ -45,6 +46,7 @@ const TransactionEvents = () => {
                 .map(event => ( event.args.to ))
             : [];
             setMintEvents(mintEvents);
+            console.log('allTransferEvents: ', allTransferEvents)
         };
 
         fetchEvents();

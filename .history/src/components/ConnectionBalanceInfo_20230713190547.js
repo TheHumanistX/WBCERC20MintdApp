@@ -6,7 +6,7 @@ import { useTokenContractData } from '../context/EthersContext';
 
 
 const ConnectionBalanceInfo = () => {
-    const { canMint, chainName, contract, formattedTokenBalance, walletAddress } = useTokenContractData();
+    const { canMint, chain, contract, formattedTokenBalance, walletAddress } = useTokenContractData();
     // // Define the address of the contract we want to interact with
     // const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
 
@@ -43,7 +43,7 @@ const ConnectionBalanceInfo = () => {
             </div>
             <div className='chain__name'>
                 {/* Display the name of the connected chain */}
-                CHAIN: <span>{chainName && chainName} </span>
+                CHAIN: <span>{chain && chain} </span>
             </div>
             <div className='WBC__balance'>
                 {/* Display the balance from the contract, converting from raw Wei to Ether and formatting it with commas */}

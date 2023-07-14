@@ -1,50 +1,35 @@
 import React from 'react'
 import { ethers } from 'ethers';
-import { useTokenContractData } from '../context/EthersContext'
 // Import necessary modules from thirdweb and local assets
 import { coin } from '../assets'
-// import { useAddress, useContract, useContractRead, useContractWrite  } from '@thirdweb-dev/react';
+import { useAddress, useContract, useContractRead, useContractWrite  } from '@thirdweb-dev/react';
 
 
 const MintBox = () => {
-    const { canMint, contract, walletAddress } = useTokenContractData();
     // Define contract address
     const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
     
-    // // Get address of connected wallet
-    // const address = useAddress();
+    // Get address of connected wallet
+    const address = useAddress();
     
-    // // Get contract using thirdweb hook
-    // const { contract } = useContract(contractAddress);
+    // Get contract using thirdweb hook
+    const { contract } = useContract(contractAddress);
     
-    // // Get boolean flag indicating if user can mint from the contract
-    // const { data: canMint } = useContractRead(contract, "checkIfUserCanMint", [address]);
+    // Get boolean flag indicating if user can mint from the contract
+    const { data: canMint } = useContractRead(contract, "checkIfUserCanMint", [address]);
     
-    // // Get mint function from the contract
-    // const { mutateAsync: mint, isLoading } = useContractWrite(contract, "mint")
+    // Get mint function from the contract
+    const { mutateAsync: mint, isLoading } = useContractWrite(contract, "mint")
 
-    // Define mint function to call mint function in the contract
-    const callToMint = async (args) => {
+    // Define function to call mint function in the contract
+    const callToMint = async () => {
         try {
-            const transaction = await contract.mint(args);
-            console.info("contract call successs", transaction);
-            const receipt = await transaction.wait();
-            console.log("receipt", receipt);
+            const data = await mint([address]);
+            console.info("contract call successs", data);
         } catch (err) {
             console.error("contract call failure", err);
         }
     }
-
-    // // Define function to call mint function in the contract
-    // const callToMint = async () => {
-    //     try {
-    //         const data = await mint([walletAddress]);
-    //         console.info("contract call successs", data);
-    //     } catch (err) {
-    //         console.error("contract call failure", err);
-    //     }
-    // }
-    
 
     // Define mint handler function which returns button element depending on canMint status
     const mintHandler = () => {

@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { useTokenContractData } from '../context/EthersContext'
 // Import necessary modules from thirdweb and local assets
 import { coin } from '../assets'
-// import { useAddress, useContract, useContractRead, useContractWrite  } from '@thirdweb-dev/react';
+import { useAddress, useContract, useContractRead, useContractWrite  } from '@thirdweb-dev/react';
 
 
 const MintBox = () => {

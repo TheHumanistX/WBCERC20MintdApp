@@ -9,7 +9,6 @@ const activeChain = "goerli"
 function App() {
   return (
     <ThirdwebProvider activeChain={activeChain}>
-      <EthersProvider>
       <div className='app__wrapper'>
         <div className='upper__spacer'></div>
         <div className='app__container'>
@@ -18,7 +17,6 @@ function App() {
           <Footer />
         </div>
       </div>
-      </EthersProvider>
     </ThirdwebProvider>
   );
 }

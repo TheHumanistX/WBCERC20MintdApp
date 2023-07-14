@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers';
 import { useTokenContractData } from '../context/EthersContext'
 // Importing required hooks from Thirdweb libraries.
-// import { useContract, useContractEvents } from '@thirdweb-dev/react';
+import { useContract, useContractEvents } from '@thirdweb-dev/react';
 
 const TransactionEvents = () => {
-    const { ETH_NULL_ADDRESS, formattedBalanceOf, provider, tokenContract } = useTokenContractData();
-    const [mintEvents, setMintEvents] = useState([]);
+    const { contractAddress, ETH_NULL_ADDRESS, formattedBalanceOf, provider, tokenContract, walletAddress } = useTokenContractData();
+    const [allTransferEvents, setAllTransferEvents] = useState([]);
     // // Specifying the contract address to interact with.
     // const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
 
@@ -36,29 +36,26 @@ const TransactionEvents = () => {
                 address: tokenContract.address,
                 topics: filter.topics,
             });
-            console.log('logs: ', logs)
             const parsedLogs = logs.map((log) => tokenContract.interface.parseLog(log));
-            console.log('parsedLogs: ', parsedLogs)
-            const mintEvents = parsedLogs
-            ? parsedLogs
-                .filter(event => event.args.from === ETH_NULL_ADDRESS)
-                .map(event => ( event.args.to ))
-            : [];
-            setMintEvents(mintEvents);
+            const transactions = parsedLogs ? parsedLogs.map((log) => log.args.to) : '';
+            setAllTransferEvents(transactions);
+            console.log('allTransferEvents: ', allTransferEvents)
         };
 
         fetchEvents();
     }
     }, [formattedBalanceOf, tokenContract])
 
+    const mintEvents = allTransferEvents
+    ? allTransferEvents
+        .filter(event => event.data.from === ETH_NULL_ADDRESS)
+        .map(event => ({ to: event.data.to }))
+    : [];
 
 
     console.log('mintEvents.length: ', mintEvents.length)
-    // const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5) : mintEvents.reverse();
-    const recentMints = mintEvents.length >= 5 
-    ? [...mintEvents.slice(0, mintEvents.length - 5)].reverse()  
-    : [...mintEvents].reverse();
-    console.log('recentMints: ', recentMints)
+    const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5).reverse() : mintEvents.reverse();
+
 
     return (
 
@@ -71,7 +68,7 @@ const TransactionEvents = () => {
                 // `key` prop is required by React for optimal performance when rendering lists.
                 // The transaction index and 'to' address are displayed for each transaction.
                 <div className='transaction__list' key={index}>
-                    <p className='transaction__to'>To: {mint}</p>
+                    <p className='transaction__to'>To: {mint.to}</p>
                     {/* Displaying the transaction number, starting from the most recent transaction. */}
                     <span>#{mintEvents.length - index}</span>
                 </div>

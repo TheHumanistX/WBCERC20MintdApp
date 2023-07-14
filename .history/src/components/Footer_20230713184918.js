@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers';
 import { useTokenContractData } from '../context/EthersContext'
 // Import necessary thirdweb libraries
-// import { useContract, useContractRead, useTokenDecimals  } from '@thirdweb-dev/react';
+import { useContract, useContractRead, useTokenDecimals  } from '@thirdweb-dev/react';
 
 const Footer = () => {
     const { decimals, tokenContract } = useTokenContractData();
