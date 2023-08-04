@@ -28,7 +28,7 @@ export const EthersProvider = ({ children }) => {
                 setSigner(signer);
                 return { provider, signer };
             } catch (err) {
-                throw err;
+                console.error(`Error in EthersProvider: ${err}`);
             }
         };
 

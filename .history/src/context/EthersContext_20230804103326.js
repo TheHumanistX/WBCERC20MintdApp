@@ -21,31 +21,23 @@ export const EthersProvider = ({ children }) => {
 
     useEffect(() => {
         const setupProviderAndSigner = async () => {
-            try{
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
-                setProvider(provider);
-                setSigner(signer);
-                return { provider, signer };
-            } catch (err) {
-                throw err;
-            }
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            setProvider(provider);
+            setSigner(signer);
+            return { provider, signer };
         };
-
+    
         const handleChainChange = (networkIdHex) => {
             const networkId = parseInt(networkIdHex, 16);
             ethersDataSetup(networkId);
         };
-
+    
         const handleAccountsChanged = async (accounts) => {
             if (accounts.length > 0) {
                 const account = accounts[0];
                 setWalletAddress(account);
-                try {
-                    const { provider, signer } = await setupProviderAndSigner();
-                } catch (err) {
-                    console.error(`Error in EthersProvider: ${err}`);
-                }
+                const { provider, signer } = await setupProviderAndSigner();
                 if (tokenContract) {
                     try {
                         const balance = await tokenContract.balanceOf(account);
@@ -67,10 +59,10 @@ export const EthersProvider = ({ children }) => {
                 setCanMint(false);
             }
         };
-
+    
         const ethersDataSetup = async (networkId) => {
             if (window.ethereum) {
-                try {
+                try{
                     const { provider, signer } = await setupProviderAndSigner();
                     const network = await provider.getNetwork();
                     setNetwork(network);
@@ -98,22 +90,22 @@ export const EthersProvider = ({ children }) => {
                 }
             }
         };
-
+    
         window.ethereum.on('chainChanged', handleChainChange);
         window.ethereum.on('accountsChanged', handleAccountsChanged);
-
+    
         // Initial setup
         ethersDataSetup(parseInt(window.ethereum.networkVersion, 10));
-
+    
         // Clean up function
         return () => {
             window.ethereum.removeListener('chainChanged', handleChainChange);
             window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         };
     }, [walletAddress]);
-
-
-
+    
+    
+    
 
     return (
         <EthersContext.Provider value={{

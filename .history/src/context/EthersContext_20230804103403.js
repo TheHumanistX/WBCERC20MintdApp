@@ -28,7 +28,7 @@ export const EthersProvider = ({ children }) => {
                 setSigner(signer);
                 return { provider, signer };
             } catch (err) {
-                throw err;
+                console.error(`Error in EthersProvider: ${err}`);
             }
         };
 
@@ -41,11 +41,7 @@ export const EthersProvider = ({ children }) => {
             if (accounts.length > 0) {
                 const account = accounts[0];
                 setWalletAddress(account);
-                try {
-                    const { provider, signer } = await setupProviderAndSigner();
-                } catch (err) {
-                    console.error(`Error in EthersProvider: ${err}`);
-                }
+                const { provider, signer } = await setupProviderAndSigner();
                 if (tokenContract) {
                     try {
                         const balance = await tokenContract.balanceOf(account);
