@@ -27,7 +27,13 @@ const ConnectionBalanceInfo = () => {
     // const { data: canMint } = useContractRead(contract, "checkIfUserCanMint", [address]);
  
     // Define a helper function that checks if a wallet is connected and returns the corresponding JSX
+    // const handleConnectWallet = () => {
+    //     // If there is no connected wallet, return a message indicating so
+    //     if (!walletAddress) return <span className='italic'>No Wallet Connected!</span>
 
+    //     // Else return the address of the connected wallet
+    //     return  <span className='bold'>Wallet: {walletAddress}</span>;
+    // }
     
     
     return (

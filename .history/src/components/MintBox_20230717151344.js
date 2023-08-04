@@ -7,9 +7,9 @@ import { coin } from '../assets'
 
 
 const MintBox = () => {
-    const { canMint, contract } = useEthers();
+    const { canMint, contract, walletAddress } = useEthers();
     // Define contract address
-    
+    const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
     
     // // Get address of connected wallet
     // const address = useAddress();

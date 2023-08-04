@@ -14,20 +14,17 @@ const TransactionEvents = () => {
     const fetchEvents = async (contract) => {
         if (contract) {
             console.log('Entered fetchEvents in TransactionEvents.js')
-            try{
-                // Filter to only mint events (where the from address is the null address)
-                const filter = contract.filters.Transfer(ETH_NULL_ADDRESS, null, null);
-    
-                // Get the event logs
-                const logs = await contract.queryFilter(filter, 8170000, 'latest');
-                console.log('logs: ', logs)
-    
-                // Extract the mint event data
-                const mintEvents = logs.map(log => log.args.to);
-                return (mintEvents)
-            } catch (err) {
-                console.error('Error getting mint events: ', err)
-            }
+
+            // Filter to only mint events (where the from address is the null address)
+            const filter = contract.filters.Transfer(ETH_NULL_ADDRESS, null, null);
+
+            // Get the event logs
+            const logs = await contract.queryFilter(filter, 8170000, 'latest');
+            console.log('logs: ', logs)
+
+            // Extract the mint event data
+            const mintEvents = logs.map(log => log.args.to);
+            return (mintEvents)
         }
     };
 

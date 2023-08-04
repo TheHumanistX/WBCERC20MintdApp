@@ -20,14 +20,6 @@ export const EthersProvider = ({ children }) => {
     const ETH_NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 
     useEffect(() => {
-        const setupProviderAndSigner = async () => {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            setProvider(provider);
-            setSigner(signer);
-            return { provider, signer };
-        };
-    
         const handleChainChange = (networkIdHex) => {
             const networkId = parseInt(networkIdHex, 16);
             ethersDataSetup(networkId);
@@ -35,20 +27,18 @@ export const EthersProvider = ({ children }) => {
     
         const handleAccountsChanged = async (accounts) => {
             if (accounts.length > 0) {
-                const account = accounts[0];
-                setWalletAddress(account);
-                const { provider, signer } = await setupProviderAndSigner();
+                setWalletAddress(accounts[0]);
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                setProvider(provider);
+                setSigner(signer);
                 if (tokenContract) {
-                    try {
-                        const balance = await tokenContract.balanceOf(account);
-                        const formattedBalance = ethers.utils.formatUnits(balance, decimals);
-                        setTokenBalance(balance);
-                        setFormattedTokenBalance(formattedBalance);
-                        const canMint = await tokenContract.checkIfUserCanMint(account);
-                        setCanMint(canMint);
-                    } catch (error) {
-                        console.log(`Cannot fetch account data: ${error.message}`);
-                    }
+                    const balance = await tokenContract.balanceOf(accounts[0]);
+                    const formattedBalance = ethers.utils.formatUnits(balance, decimals);
+                    setTokenBalance(balance);
+                    setFormattedTokenBalance(formattedBalance);
+                    const canMint = await tokenContract.checkIfUserCanMint(accounts[0]);
+                    setCanMint(canMint);
                 }
             } else {
                 setWalletAddress(null);
@@ -62,27 +52,29 @@ export const EthersProvider = ({ children }) => {
     
         const ethersDataSetup = async (networkId) => {
             if (window.ethereum) {
-                const { provider, signer } = await setupProviderAndSigner();
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const network = await provider.getNetwork();
                 setNetwork(network);
                 setChainName(network ? network.name : null);
+                setProvider(provider);
+    
                 if (networkId === 5) { // Check for Goerli network
-                    try {
-                        const walletAddress = await signer.getAddress();
-                        const tokenContract = new ethers.Contract(contractAddress, abi, signer);
-                        setWalletAddress(walletAddress);
-                        setTokenContract(tokenContract);
-                        const decimals = await tokenContract.decimals();
-                        const tokenBalance = await tokenContract.balanceOf(walletAddress);
-                        const canMint = await tokenContract.checkIfUserCanMint(walletAddress);
-                        const formattedBalance = ethers.utils.formatUnits(tokenBalance, decimals);
-                        setDecimals(decimals);
-                        setTokenBalance(tokenBalance);
-                        setCanMint(canMint);
-                        setFormattedTokenBalance(formattedBalance);
-                    } catch (error) {
-                        console.error(`Error in EthersProvider: ${error}`);
-                    }
+                    const signer = provider.getSigner();
+                    const walletAddress = await signer.getAddress();
+                    const tokenContract = new ethers.Contract(contractAddress, abi, signer);
+    
+                    setSigner(signer);
+                    setWalletAddress(walletAddress);
+                    setTokenContract(tokenContract);
+    
+                    const decimals = await tokenContract.decimals();
+                    const tokenBalance = await tokenContract.balanceOf(walletAddress);
+                    const canMint = await tokenContract.checkIfUserCanMint(walletAddress);
+                    const formattedBalance = ethers.utils.formatUnits(tokenBalance, decimals);
+                    setDecimals(decimals);
+                    setTokenBalance(tokenBalance);
+                    setCanMint(canMint);
+                    setFormattedTokenBalance(formattedBalance);
                 }
             }
         };
@@ -99,7 +91,6 @@ export const EthersProvider = ({ children }) => {
             window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         };
     }, [walletAddress]);
-    
     
     
 

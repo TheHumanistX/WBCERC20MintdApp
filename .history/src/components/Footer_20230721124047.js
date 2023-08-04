@@ -14,15 +14,11 @@ const Footer = () => {
 
     const getSupplyData = async (contract) => {
         if (contract) {
-            try {
-                const supply = await contract.totalSupply();
-                console.log(`Supply: ${supply}`)
-                const formattedSupply = parseInt(ethers.utils.formatUnits(supply, decimals));
-                console.log('getSupplyData formattedSupply: ', formattedSupply)
-                return (formattedSupply);
-            } catch (err) {
-                console.error('Error getting supply data: ', err)
-            }
+            const supply = await contract.totalSupply();
+            console.log(`Supply: ${supply}`)
+            const formattedSupply = parseInt(ethers.utils.formatUnits(supply, decimals));
+            console.log('getSupplyData formattedSupply: ', formattedSupply)
+            return (formattedSupply);
         }
     }
     

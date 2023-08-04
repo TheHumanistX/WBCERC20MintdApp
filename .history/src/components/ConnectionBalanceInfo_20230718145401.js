@@ -1,7 +1,6 @@
 import React from 'react'
 import { ethers } from 'ethers';
 import { useEthers } from '../context/EthersContext';
-import { handleConnectWallet } from '../utility/handleConnectWallet';
 // Import various hooks from @thirdweb-dev/react for interacting with the Ethereum blockchain
 // import { useAddress, useChain, useContract, useContractRead } from '@thirdweb-dev/react';
 
@@ -27,14 +26,20 @@ const ConnectionBalanceInfo = () => {
     // const { data: canMint } = useContractRead(contract, "checkIfUserCanMint", [address]);
  
     // Define a helper function that checks if a wallet is connected and returns the corresponding JSX
+    const handleConnectWallet = () => {
+        // If there is no connected wallet, return a message indicating so
+        if (!walletAddress) return <span className='italic'>No Wallet Connected!</span>
 
+        // Else return the address of the connected wallet
+        return  <span className='bold'>Wallet: {walletAddress}</span>;
+    }
     
     
     return (
         <div className='info__container border-gradient'>
             <div className="wallet__address">
                 {/* Call our helper function and render its result */}
-                {handleConnectWallet(walletAddress)}
+                {handleConnectWallet()}
             </div>
             <div className='chain__name'>
                 {/* Display the name of the connected chain */}

@@ -12,22 +12,18 @@ const Footer = () => {
     console.log(`Token Contract: ${tokenContract}`)
 
 
-    const getSupplyData = async (contract) => {
-        if (contract) {
-            try {
-                const supply = await contract.totalSupply();
-                console.log(`Supply: ${supply}`)
-                const formattedSupply = parseInt(ethers.utils.formatUnits(supply, decimals));
-                console.log('getSupplyData formattedSupply: ', formattedSupply)
-                return (formattedSupply);
-            } catch (err) {
-                console.error('Error getting supply data: ', err)
-            }
+    const getSupplyData = async (tokenContract) => {
+        if (tokenContract) {
+            const supply = await tokenContract.totalSupply();
+            console.log(`Supply: ${supply}`)
+            const formattedSupply = parseInt(ethers.utils.formatUnits(supply, decimals));
+            console.log('getSupplyData formattedSupply: ', formattedSupply)
+            return (formattedSupply);
         }
     }
-    
+
     const formattedSupply = useContract(tokenContract, getSupplyData);
-    
+    console.log('formattedSupply: ', formattedSupply)
     // Get totalSupply from the smart contract
 
     // const { data: supply } = useContractRead(contract, "totalSupply");

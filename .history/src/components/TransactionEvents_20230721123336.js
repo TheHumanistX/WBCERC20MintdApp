@@ -7,32 +7,43 @@ import { useContract } from '../hooks/useContract';
 
 const TransactionEvents = () => {
     const { ETH_NULL_ADDRESS, formattedBalanceOf, provider, tokenContract } = useEthers();
+    // const [mintEvents, setMintEvents] = useState([]);
+    // // Specifying the contract address to interact with.
+    // const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
+
+    // // Using the `useContract` hook from thirdweb library to create a contract instance.
+    // const { contract } = useContract(contractAddress);
+
+    // Using the `useContractEvents` hook to read all events from the contract.
+    // const { data: allTransferEvents } = useContractEvents(tokenContract, "Transfer", {
+    //     queryFilter: {
+    //       fromBlock: 9170000,
+    //     },
+    //     subscribe: true
+    //   });
+
     
+        console.log('Entered useEffect in TransactionEvents.js')
+        const fetchEvents = async (tokenContract) => {
+                if (tokenContract) {
+                console.log('Entered fetchEvents in TransactionEvents.js')
 
-
-    console.log('TransactionEvents tokenContract: ', tokenContract)
-    const fetchEvents = async (contract) => {
-        if (contract) {
-            console.log('Entered fetchEvents in TransactionEvents.js')
-            try{
                 // Filter to only mint events (where the from address is the null address)
-                const filter = contract.filters.Transfer(ETH_NULL_ADDRESS, null, null);
-    
+                const filter = tokenContract.filters.Transfer(ETH_NULL_ADDRESS, null, null);
+
                 // Get the event logs
-                const logs = await contract.queryFilter(filter, 8170000, 'latest');
+                const logs = await tokenContract.queryFilter(filter, 8170000, 'latest');
                 console.log('logs: ', logs)
-    
+
                 // Extract the mint event data
                 const mintEvents = logs.map(log => log.args.to);
-                return (mintEvents)
-            } catch (err) {
-                console.error('Error getting mint events: ', err)
-            }
-        }
-    };
+                setMintEvents(mintEvents);
+                console.log('mintEvents: ', mintEvents)
+                }
+            };  
 
-    const mintEvents = useContract(tokenContract, fetchEvents);
-    // console.log('mintEvents.length: ', mintEvents.length)
+            const mintEvents = useContract(tokenContract, fetchEvents);
+    console.log('mintEvents.length: ', mintEvents.length)
     // const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5) : mintEvents.reverse();
     const recentMints = mintEvents.length >= 5
         ? [...mintEvents.slice(mintEvents.length - 5, mintEvents.length)].reverse()
