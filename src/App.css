@@ -84,14 +84,14 @@ header {
   justify-content: space-between;
   align-items: center;
   height: 20%;
-  padding: 0 3.5vw;
+  padding: 0 0 0 3.5vw;
 }
 
 .logo {
   position: relative;
   color: hsl(145, 70%, 64%);
-  font-size: clamp(4.00rem, calc(-0.86rem + 5.71vw), 6.00rem);
-  text-shadow: 
+  font-size: clamp(4.00rem, calc(0.00rem + 4.69vw), 7.50rem);
+  text-shadow:
     0px 0px 45px hsl(145, 60%, 50%),
     0px 0px 20px hsl(145, 50%, 50%),
     0px 0px 32px hsl(145, 50%, 50%);
@@ -123,23 +123,49 @@ header {
 }
 
 .connect-wallet {
+  justify-content: center !important;
   background: rgba(121, 121, 121, 0) !important;
-  border: 2px solid rgb(121,121,121) !important;
+  border: 2px solid rgb(121, 121, 121) !important;
   backdrop-filter: blur(6px);
   color: #fff !important;
   margin-left: 30px !important;
+  height: clamp(4.31rem, calc(2.45rem + 2.18vw), 5.94rem) !important;
+  width: clamp(13.44rem, calc(5.21rem + 9.63vw), 20.63rem) !important;
 }
 
 .tw-connected-wallet__address {
   color: #fff !important;
 }
 
+.css-9y9lc8 {
+  text-align: center !important;
+  font-size: clamp(0.88rem, calc(0.02rem + 1.01vw), 1.63rem) !important
+}
+
+.css-1k4oq5h {
+  font-size: clamp(0.90rem, calc(-0.04rem + 1.10vw), 1.72rem) !important;
+}
+
 .main__container {
   display: grid;
   grid-template: repeat(2, 1fr) / 60% 40%;
-height: 100%;
-margin-top: 1.5rem;
-padding: 0 2rem;
+  height: 100%;
+  margin-top: 1.5rem;
+  padding: 0 clamp(0.75rem, calc(-0.68rem + 1.68vw), 2.00rem);
+}
+
+.app-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 1.5rem;
+  padding: 0 2rem;
+}
+
+.loading {
+  color: #fff;
+  font-size: clamp(1.00rem, calc(-0.21rem + 1.43vw), 1.50rem);
 }
 
 .info__container {
@@ -150,7 +176,7 @@ padding: 0 2rem;
   width: 38vw;
   margin-left: 4%;
   color: #fff;
-  font-size: clamp(1.00rem, calc(-0.21rem + 1.43vw), 1.50rem);
+  font-size: clamp(1.00rem, calc(-0.14rem + 1.34vw), 2.00rem);
   padding: 1rem 1.5rem;
 }
 
@@ -161,13 +187,13 @@ padding: 0 2rem;
   width: 38vw;
   margin-left: 4%;
   color: #fff;
-  font-size: clamp(1.00rem, calc(-0.21rem + 1.43vw), 1.50rem);
+  font-size: clamp(1.00rem, calc(-0.14rem + 1.34vw), 2.00rem);
   padding: 0 1rem;
-  margin-top: 5px;
 }
+
 .transaction__title {
   color: #fff;
-  font-size: clamp(1.00rem, calc(-0.21rem + 1.43vw), 1.50rem);
+  font-size: clamp(1.00rem, calc(-0.72rem + 2.01vw), 2.50rem);
   text-align: center;
 }
 
@@ -191,7 +217,7 @@ padding: 0 2rem;
   align-items: center;
   justify-content: space-between;
   width: 22.5vw;
-  height: 54vh;
+  height: 54.5vh;
   margin: 0 2rem;
   justify-self: end;
 }
@@ -202,10 +228,8 @@ padding: 0 2rem;
 }
 
 .mintbox__turtlecat {
-  filter: 
-    drop-shadow(0px 0px 15px hsl(145, 70%, 64%))
-    
-    drop-shadow(0px 0px 30px hsl(145, 70%, 64%));
+  filter:
+    drop-shadow(0px 0px 15px hsl(145, 70%, 64%)) drop-shadow(0px 0px 30px hsl(145, 70%, 64%));
 }
 
 .mintbox__button {
@@ -214,7 +238,7 @@ padding: 0 2rem;
 
 .mintbox__button-mint {
   color: #fff;
-  font-size: clamp(2.00rem, calc(-0.43rem + 2.86vw), 3.00rem);
+  font-size: clamp(2.00rem, calc(-0.29rem + 2.68vw), 4.00rem);
   text-align: center;
   width: 15vw;
   height: 8vh;
@@ -225,7 +249,7 @@ padding: 0 2rem;
 }
 
 .cannotMint {
-  cursor:not-allowed;
+  cursor: not-allowed;
   background-color: #4b4b4b;
   color: rgb(255, 255, 255, .1);
 }
@@ -253,4 +277,12 @@ footer {
 .footer__circulatingSupply {
   color: #FCF497;
   font-size: clamp(1.00rem, calc(-1.43rem + 2.86vw), 2.00rem);
+}
+
+/* Media Queries */
+
+@media (min-height: 1080px) {
+  .mintbox__container {
+    height: 55.75vh;
+  }
 }

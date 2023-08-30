@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ethers } from 'ethers';
 import { useEthers } from '../context/EthersContext'
 import { useContract } from '../hooks/useContract';
@@ -11,7 +11,7 @@ const TransactionEvents = () => {
 
 
     console.log('TransactionEvents tokenContract: ', tokenContract)
-    const fetchEvents = async (contract) => {
+    const fetchEvents = useCallback(async (contract) => {
         if (contract) {
             console.log('Entered fetchEvents in TransactionEvents.js')
             try{
@@ -29,15 +29,19 @@ const TransactionEvents = () => {
                 console.error('Error getting mint events: ', err)
             }
         }
-    };
+    }, [ETH_NULL_ADDRESS]);
 
     const mintEvents = useContract(tokenContract, fetchEvents);
+    console.log('mintEvents: ', mintEvents)
     // console.log('mintEvents.length: ', mintEvents.length)
     // const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5) : mintEvents.reverse();
-    const recentMints = mintEvents.length >= 5
-        ? [...mintEvents.slice(mintEvents.length - 5, mintEvents.length)].reverse()
-        : [...mintEvents].reverse();
-    console.log('recentMints: ', recentMints)
+    let recentMints = []
+    if (Array.isArray(mintEvents)) {
+        recentMints = mintEvents?.length >= 5
+            ? [...mintEvents.slice(mintEvents.length - 5, mintEvents.length)].reverse()
+            : [...mintEvents].reverse();
+        }
+        console.log('recentMints: ', recentMints)
 
     return (
 

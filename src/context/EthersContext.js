@@ -4,7 +4,7 @@ import abi from '../abi/abi.json';
 
 const EthersContext = createContext();
 
-export const EthersProvider = ({ children }) => {
+export const EthersProvider = ({ children, setIsLoading  }) => {
 
     const [provider, setProvider] = useState(null);
     const [signer, setSigner] = useState(null);
@@ -21,15 +21,7 @@ export const EthersProvider = ({ children }) => {
 
     useEffect(() => {
         const setupProviderAndSigner = async () => {
-            try{
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
-                setProvider(provider);
-                setSigner(signer);
-                return { provider, signer };
-            } catch (err) {
-                throw err;
-            }
+
         };
 
         const handleChainChange = (networkIdHex) => {
@@ -68,34 +60,60 @@ export const EthersProvider = ({ children }) => {
             }
         };
 
-        const ethersDataSetup = async (networkId) => {
-            if (window.ethereum) {
-                try {
-                    const { provider, signer } = await setupProviderAndSigner();
+        const ethersDataSetup = async () => {
+            try {
+                if (window.ethereum) {
+                    console.log('EthersContext - Entered try block in ethersDataSetup')
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    setProvider(provider);
+                    console.log('EthersContext - provider: ', provider)
                     const network = await provider.getNetwork();
+                    console.log('EthersContext - network: ', network)
                     setNetwork(network);
                     setChainName(network ? network.name : null);
-                } catch (err) {
-                    console.error(`Error in EthersProvider: ${err}`);
-                }
-                if (networkId === 5) { // Check for Goerli network
-                    try {
-                        const walletAddress = await signer.getAddress();
-                        const tokenContract = new ethers.Contract(contractAddress, abi, signer);
-                        setWalletAddress(walletAddress);
-                        setTokenContract(tokenContract);
-                        const decimals = await tokenContract.decimals();
-                        const tokenBalance = await tokenContract.balanceOf(walletAddress);
-                        const canMint = await tokenContract.checkIfUserCanMint(walletAddress);
-                        const formattedBalance = ethers.utils.formatUnits(tokenBalance, decimals);
-                        setDecimals(decimals);
-                        setTokenBalance(tokenBalance);
-                        setCanMint(canMint);
-                        setFormattedTokenBalance(formattedBalance);
-                    } catch (error) {
-                        console.error(`Error in EthersProvider: ${error}`);
+                    
+                    if (network?.chainId === 5) { // Check for Goerli network
+                        try {
+                            const signer = provider.getSigner();
+                            setSigner(signer);
+                            console.log('EthersContext - Entered second try block in ethersDataSetup, right before setting up wallet.')
+                            const tokenContract = new ethers.Contract(contractAddress, abi, signer);
+                            const walletAddress = await signer?.getAddress();
+                            console.log('EthersContext - walletAddress: ', walletAddress)
+                            console.log('EthersContext - tokenContract: ', tokenContract)
+                            setWalletAddress(walletAddress);
+                            setTokenContract(tokenContract);
+                            const decimals = await tokenContract?.decimals();
+                            const tokenBalance = await tokenContract?.balanceOf(walletAddress);
+                            const canMint = await tokenContract?.checkIfUserCanMint(walletAddress);
+                            const formattedBalance = ethers.utils.formatUnits(tokenBalance, decimals);
+                            setDecimals(decimals);
+                            setTokenBalance(tokenBalance);
+                            setCanMint(canMint);
+                            setFormattedTokenBalance(formattedBalance);
+                            setIsLoading(false)
+                        } catch (err) {
+                            if (err.code === 4001) {
+                                // User rejected request
+                                console.log("User rejected request");
+                            } else {
+                                console.error(err);
+                            }
+                            setIsLoading(false)
+                        }
                     }
                 }
+            } catch (err) {
+                if (err.message.includes('unknown account #0')) {
+                    // Handle error due to MetaMask being locked
+                    console.log('Metamask is locked. Please unlock and reconnect.');
+                    setWalletAddress(null);
+                    setSigner(null);
+                    setProvider(null);
+                } else {
+                    console.error('Error in EthersContext: ', err.message)
+                }
+                setIsLoading(false)
             }
         };
 
@@ -103,14 +121,16 @@ export const EthersProvider = ({ children }) => {
         window.ethereum.on('accountsChanged', handleAccountsChanged);
 
         // Initial setup
-        ethersDataSetup(parseInt(window.ethereum.networkVersion, 10));
+        ethersDataSetup().then(() => {
+            setIsLoading(false);  // Set isLoading to false when everything is initialized
+          });
 
         // Clean up function
         return () => {
             window.ethereum.removeListener('chainChanged', handleChainChange);
             window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         };
-    }, [walletAddress]);
+    }, []);
 
 
 

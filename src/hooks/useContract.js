@@ -29,8 +29,10 @@ export const useContract = (contract, callback) => {
     // debugger;
   useEffect(() => {
     console.log('useEffect in useContract triggered....')
+    console.log('useContract - contract: ', contract)
+    console.log('useContract - callback: ', callback)
     if (!contract || !callback) {
-      return null;
+      return;
     }
     const fetchData = async () => {
       if (contract) {
