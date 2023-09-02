@@ -20,9 +20,6 @@ export const EthersProvider = ({ children, setIsLoading  }) => {
     const ETH_NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 
     useEffect(() => {
-        const setupProviderAndSigner = async () => {
-
-        };
 
         const handleChainChange = (networkIdHex) => {
             const networkId = parseInt(networkIdHex, 16);
