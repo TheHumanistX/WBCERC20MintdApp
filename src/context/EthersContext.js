@@ -46,6 +46,7 @@ export const EthersProvider = ({ children, setIsLoading  }) => {
                             setTokenContract(tokenContract)
                             const decimals = await tokenContract?.decimals()
                             const tokenBalance = await tokenContract?.balanceOf(walletAddress)
+                            console.log('EthersContext - tokenBalance: ', tokenBalance)
                             const canMint = await tokenContract?.checkIfUserCanMint(walletAddress)
                             const formattedBalance = ethers.utils.formatUnits(tokenBalance, decimals)
                             setDecimals(decimals)
@@ -84,40 +85,39 @@ export const EthersProvider = ({ children, setIsLoading  }) => {
             window.location.reload()
         };
 
-        const handleAccountsChanged = async (accounts) => {
-            if (accounts.length > 0) {
-                const account = accounts[0]
-                setWalletAddress(account)
+         window.ethereum.on('accountsChanged', async (accounts) => {
+            console.log('EthersContext accountsChanged entered on account change...')
+            if (accounts.length === 0) {
+                console.log('Please connect to MetaMask.');
+                alert('Your MetaMask is not connected anymore. Please unlock or reconnect.'); // display an alert
+                // handle account disconnection...
+                setWalletAddress(null);
+                setSigner(null);
+            } else if (accounts[0] !== walletAddress) {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                console.log('EthersContext accountsChanged provider: ', provider)
                 try {
-                    const provider = new ethers.providers.Web3Provider(window.ethereum)
-                    setProvider(provider)
-                    const signer = provider.getSigner()
-                    setSigner(signer)
-                } catch (err) {
-                    console.error(`Error in EthersProvider: ${err}`);
-                }
-                if (tokenContract) {
-                    try {
-                        const balance = await tokenContract.balanceOf(account)
-                        const formattedBalance = ethers.utils.formatUnits(balance, decimals)
-                        setTokenBalance(balance)
-                        setFormattedTokenBalance(formattedBalance)
-                        const canMint = await tokenContract.checkIfUserCanMint(account)
-                        setCanMint(canMint)
-                        window.location.reload()
-                    } catch (error) {
-                        console.log(`Cannot fetch account data: ${error.message}`)
+                    const signer = await provider.getSigner();
+                    const walletAddress = await signer.getAddress();
+                    console.log('EthersContext walletAddress updated to: ', walletAddress)
+                    setSigner(signer);
+                    setWalletAddress(walletAddress);
+                    window.location.reload()
+                } catch (error) {
+                    if (error.code === 4001) {
+                        // User rejected request
+                        console.log("User rejected request");
+                        // Add some user-friendly notification logic here
+                    } else {
+                        console.error(error);
+                        alert('Error when getting wallet address. Please check your MetaMask connection.');
+                        setWalletAddress(null);
+                        setSigner(null);
                     }
                 }
-            } else {
-                setWalletAddress(null)
-                setProvider(null)
-                setSigner(null)
-                setTokenBalance(null)
-                setFormattedTokenBalance(null)
-                setCanMint(false)
+
             }
-        };
+        });
 
         window.ethereum.on('chainChanged', handleChainChange)
         window.ethereum.on('accountsChanged', handleAccountsChanged)
