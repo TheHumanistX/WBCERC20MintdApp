@@ -31,7 +31,12 @@ const MintBox = () => {
             const receipt = await transaction.wait();
             console.log("receipt", receipt);
         } catch (err) {
-            console.error("contract call failure", err.message);
+            if (err.code === 4001) {
+                // User rejected request
+                console.log("User rejected request")
+            } else {
+                console.error('Failed to mint...', err)
+            }
         }
     }
 
