@@ -61,7 +61,7 @@ export const EthersProvider = ({ children, setIsLoading }) => {
         const networkId = parseInt(networkIdHex, 16)
 
         if ( networkId === 5 ) {
-            setTriggerUpdate(!triggerUpdate);
+            setTriggerUpdate(prevState => !prevState);
             setIsProviderReady(false);
             setIsTokenContractReady(false);
             window.location.reload()
@@ -80,7 +80,7 @@ export const EthersProvider = ({ children, setIsLoading }) => {
             setWalletAddress(null);
             setSigner(null);
         } else if (accounts[0] !== walletAddress) {
-            setTriggerUpdate(!triggerUpdate);
+            setTriggerUpdate(prevState => !prevState);
             setIsProviderReady(false);
             setIsTokenContractReady(false);
         }
