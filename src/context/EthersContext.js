@@ -102,7 +102,7 @@ export const EthersProvider = ({ children, setIsLoading  }) => {
                     console.log('EthersContext walletAddress updated to: ', walletAddress)
                     setSigner(signer);
                     setWalletAddress(walletAddress);
-                    window.location.reload()
+                    // window.location.reload()
                 } catch (error) {
                     if (error.code === 4001) {
                         // User rejected request
