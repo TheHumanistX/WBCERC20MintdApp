@@ -85,7 +85,7 @@ export const EthersProvider = ({ children, setIsLoading  }) => {
             window.location.reload()
         };
 
-         window.ethereum.on('accountsChanged', async (accounts) => {
+         const handleAccountsChanged = async (accounts) => {
             console.log('EthersContext accountsChanged entered on account change...')
             if (accounts.length === 0) {
                 console.log('Please connect to MetaMask.');
@@ -117,7 +117,7 @@ export const EthersProvider = ({ children, setIsLoading  }) => {
                 }
 
             }
-        });
+        };
 
         window.ethereum.on('chainChanged', handleChainChange)
         window.ethereum.on('accountsChanged', handleAccountsChanged)
