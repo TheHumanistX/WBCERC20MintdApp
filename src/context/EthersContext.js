@@ -4,7 +4,7 @@ import abi from '../abi/abi.json'
 
 const EthersContext = createContext();
 
-export const EthersProvider = ({ children, setIsLoading }) => {
+export const EthersProvider = ({ children }) => {
 
     const [triggerUpdate, setTriggerUpdate] = useState(true);
     const [isProviderReady, setIsProviderReady] = useState(false);
@@ -54,7 +54,6 @@ export const EthersProvider = ({ children, setIsLoading }) => {
         setTokenBalance(tokenBalance)
         setCanMint(canMint)
         setFormattedTokenBalance(formattedBalance)
-        setIsLoading(false)
     }
 
     const handleChainChange = async (networkIdHex) => {
@@ -119,7 +118,7 @@ export const EthersProvider = ({ children, setIsLoading }) => {
     useEffect(() => {
 
         if (isProviderReady) { 
-        const ethersDataSetup = async () => {
+        const setupSignerAccountAndTokenContract = async () => {
             try {
                 console.log('EthersContext - Entered second try block in ethersDataSetup, right before setting up wallet.')
                 await updateSignerAccountAndTokenContract(provider)
@@ -131,16 +130,15 @@ export const EthersProvider = ({ children, setIsLoading }) => {
                 } else {
                     console.error(err)
                 }
-                setIsLoading(false)
             }
         }
-        ethersDataSetup()
+        setupSignerAccountAndTokenContract()
     }
     }, [isProviderReady])
 
     useEffect(() => {
         if (isTokenContractReady) {
-            const ethersDataSetup = async () => {
+            const setupTokenData = async () => {
                 try {
                     await updateTokenData(tokenContract, walletAddress)
                 } catch (err) {
@@ -152,7 +150,7 @@ export const EthersProvider = ({ children, setIsLoading }) => {
                     }
                 }
             }
-            ethersDataSetup()
+            setupTokenData()
         }
     }, [isTokenContractReady])
 
