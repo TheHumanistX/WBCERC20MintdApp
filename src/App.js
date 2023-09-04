@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ThirdwebProvider } from '@thirdweb-dev/react';
 import { EthersProvider } from './context/EthersContext'
 import { Footer, Header, Main } from './components'

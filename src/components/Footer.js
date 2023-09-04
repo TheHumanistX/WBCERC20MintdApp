@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ethers } from 'ethers';
 import { useEthers } from '../context/EthersContext'
 import { useContract } from '../hooks/useContract';
-// Import necessary thirdweb libraries
-// import { useContract, useContractRead, useTokenDecimals  } from '@thirdweb-dev/react';
 
 const Footer = () => {
     const { decimals, tokenContract } = useEthers();
@@ -27,13 +25,6 @@ const Footer = () => {
     }
     
     const formattedSupply = useContract(tokenContract, getSupplyData);
-    
-    // Get totalSupply from the smart contract
-
-    // const { data: supply } = useContractRead(contract, "totalSupply");
-
-    // Get decimal places of the token
-    // const { data: decimals } = useTokenDecimals(contract);
 
     return (
         <footer>

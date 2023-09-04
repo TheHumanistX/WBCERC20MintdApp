@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { ethers } from 'ethers';
 import { useEthers } from '../context/EthersContext'
 import { useContract } from '../hooks/useContract';
-// Importing required hooks from Thirdweb libraries.
-// import { useContract, useContractEvents } from '@thirdweb-dev/react';
 
 const TransactionEvents = () => {
     const { ETH_NULL_ADDRESS, formattedBalanceOf, provider, tokenContract } = useEthers();
@@ -33,8 +31,7 @@ const TransactionEvents = () => {
 
     const mintEvents = useContract(tokenContract, fetchEvents);
     console.log('mintEvents: ', mintEvents)
-    // console.log('mintEvents.length: ', mintEvents.length)
-    // const recentMints = mintEvents.length >= 5 ? mintEvents.slice(0, mintEvents.length - 5) : mintEvents.reverse();
+
     let recentMints = []
     if (Array.isArray(mintEvents)) {
         recentMints = mintEvents?.length >= 5

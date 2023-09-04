@@ -2,34 +2,10 @@ import React from 'react'
 import { ethers } from 'ethers';
 import { useEthers } from '../context/EthersContext';
 import { handleConnectWallet } from '../utility/handleConnectWallet';
-// Import various hooks from @thirdweb-dev/react for interacting with the Ethereum blockchain
-// import { useAddress, useChain, useContract, useContractRead } from '@thirdweb-dev/react';
-
 
 const ConnectionBalanceInfo = () => {
     const { canMint, chainName, formattedTokenBalance, walletAddress } = useEthers();
-    // // Define the address of the contract we want to interact with
-    // const contractAddress = "0xFB29697113015019c42E90fdBC94d9B4898D2602";
 
-    // // Use the useAddress hook to get the address of the connected wallet
-    // const address = useAddress();
-
-    // // Use the useChain hook to get details of the currently connected blockchain
-    // const chain = useChain();
-
-    // // Use the useContract hook to create an instance of the contract we want to interact with
-    // const { contract } = useContract(contractAddress);
-
-    // // Use the useContractRead hook to read the 'balanceOf' property of the contract for the connected address
-    // const { data: balanceOf } = useContractRead(contract, "balanceOf", [address]);
-
-    // // Use the useContractRead hook to read the 'checkIfUserCanMint' property of the contract for the connected address
-    // const { data: canMint } = useContractRead(contract, "checkIfUserCanMint", [address]);
- 
-    // Define a helper function that checks if a wallet is connected and returns the corresponding JSX
-
-    
-    
     return (
         <div className='info__container border-gradient'>
             <div className="wallet__address">

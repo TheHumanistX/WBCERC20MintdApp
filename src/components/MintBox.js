@@ -1,27 +1,12 @@
 import React from 'react'
 import { ethers } from 'ethers';
 import { useEthers } from '../context/EthersContext'
-// Import necessary modules from thirdweb and local assets
 import { coin } from '../assets'
-// import { useAddress, useContract, useContractRead, useContractWrite  } from '@thirdweb-dev/react';
+
 
 
 const MintBox = () => {
     const { canMint, contract } = useEthers();
-    // Define contract address
-    
-    
-    // // Get address of connected wallet
-    // const address = useAddress();
-    
-    // // Get contract using thirdweb hook
-    // const { contract } = useContract(contractAddress);
-    
-    // // Get boolean flag indicating if user can mint from the contract
-    // const { data: canMint } = useContractRead(contract, "checkIfUserCanMint", [address]);
-    
-    // // Get mint function from the contract
-    // const { mutateAsync: mint, isLoading } = useContractWrite(contract, "mint")
 
     // Define mint function to call mint function in the contract
     const callToMint = async (args) => {
@@ -39,17 +24,6 @@ const MintBox = () => {
             }
         }
     }
-
-    // // Define function to call mint function in the contract
-    // const callToMint = async () => {
-    //     try {
-    //         const data = await mint([walletAddress]);
-    //         console.info("contract call successs", data);
-    //     } catch (err) {
-    //         console.error("contract call failure", err);
-    //     }
-    // }
-    
 
     // Define mint handler function which returns button element depending on canMint status
     const mintHandler = () => {
